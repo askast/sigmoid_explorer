@@ -202,6 +202,9 @@ def _pick_columns_dialog(column_names):
     w, h = root.winfo_width(), root.winfo_height()
     sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
     root.geometry(f"+{(sw - w) // 2}+{(sh - h) // 3}")
+    _raise_root(root)
+    # Drop topmost once shown so it doesn't float over everything afterward.
+    root.after(200, lambda: root.attributes("-topmost", False))
     root.mainloop()
     return result["selection"]
 
@@ -272,12 +275,25 @@ def slider_ranges(t, popt):
     }
 
 
+def _raise_root(root):
+    """Force a Tk window to the foreground on Windows.
+
+    Native common dialogs (file open/save) inherit the topmost/focus state of
+    their parent. Without this, the parent is hidden behind the active window
+    and the dialog opens behind it too, with no taskbar button to find it by.
+    """
+    root.attributes("-topmost", True)
+    root.lift()
+    root.focus_force()
+
+
 def _pick_open_csv():
     """Tk file dialog for an input CSV. Returns the chosen path or None."""
     import tkinter as tk
     from tkinter import filedialog
     root = tk.Tk()
     root.withdraw()
+    _raise_root(root)
     try:
         path = filedialog.askopenfilename(
             title="Select CSV (time, temperature)",
@@ -294,6 +310,7 @@ def _pick_save_csv(default_name="fit_curve.csv"):
     from tkinter import filedialog
     root = tk.Tk()
     root.withdraw()
+    _raise_root(root)
     try:
         path = filedialog.asksaveasfilename(
             title="Save fit curve as CSV",
