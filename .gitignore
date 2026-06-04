@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+
+# PyInstaller output (regeneratable via `uv run pyinstaller sigmoid_explorer.spec`)
+build/
+dist/

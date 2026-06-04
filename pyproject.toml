@@ -1,0 +1,16 @@
+[project]
+name = "sigmoid-explorer"
+version = "0.1.0"
+description = "Interactive asymmetric-sigmoid fitter for time/temperature CSVs."
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "pandas",
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.20.0",
+]
